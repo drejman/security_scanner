@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  # Django application
+  web:
+    build:
+      context: ..
+      dockerfile: ./docker/security_scanner/Dockerfile.dev
+    image: security_scanner:latest
+    container_name: security_scanner
+    env_file:
+      - ../env/dev.env
+    volumes:
+      - ../src/security_scanner:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=True
+    depends_on:
+      - mysql_db
+    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+
+  # MySQL database
+  mysql_db:
+    image: mysql:latest
+    container_name: mysql_db
+    env_file:
+      - ../env/dev.env
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
