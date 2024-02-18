@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-7@eppp1o5c+&pgcusk4!*%xt#vfp%oy8745eb@i1i24j_nu$w_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['fitting-secondly-gobbler.ngrok-free.app']
 
 
 # Application definition
@@ -79,7 +79,7 @@ DATABASES = {
         'NAME': os.getenv('MYSQL_DATABASE'),
         'USER': os.getenv('MYSQL_USER'),
         'PASSWORD': os.getenv('MYSQL_PASSWORD'),
-        'HOST': 'mysql_db',
+        'HOST': os.getenv('DB_HOST', '127.0.0.1'),
         'PORT': '3306',
     }
 }
@@ -126,3 +126,5 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+SQS_queue_name = 'SQS_QUEUE'
