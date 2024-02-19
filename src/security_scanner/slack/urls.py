@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import EventView
+from slack.views import EventView
 
 app_name = "slack"
 

@@ -25,7 +25,9 @@ SECRET_KEY = 'django-insecure-7@eppp1o5c+&pgcusk4!*%xt#vfp%oy8745eb@i1i24j_nu$w_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['fitting-secondly-gobbler.ngrok-free.app']
+ALLOWED_HOSTS = ['localhost',
+                 'fitting-secondly-gobbler.ngrok-free.app',
+                 ]
 
 
 # Application definition
@@ -37,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'data_loss_protection',
+    'slack',
 ]
 
 MIDDLEWARE = [

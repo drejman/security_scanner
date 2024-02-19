@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from django.views import View
 from django.utils.decorators import method_decorator
 
-from slack.adapter.queue.sqs_queue import SQSQueueRepository
+from adapter.queue.sqs_queue import SQSQueueRepository
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -17,7 +17,16 @@ class EventView(View):
             return JsonResponse({'challenge': payload['challenge']})
         else:
             print(payload)
-            with SQSQueueRepository() as queue:
-                queue.send_message(json.dumps(payload['event']))
             # Message queue should be injected
+            with SQSQueueRepository() as queue:
+                queue.send_message(
+                    json.dumps(
+                        {
+                            'task': 'DLP_scan',
+                            'kwargs': {
+                                'event': payload['event'],
+                            }
+                        }
+                    )
+                )
             return HttpResponse("OK", status=200)

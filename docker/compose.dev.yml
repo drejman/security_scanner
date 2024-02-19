@@ -1,24 +1,33 @@
 version: '3'
 
+### TEMPLATES
+x-django_template: &django_template
+  build:
+    context: ..
+    dockerfile: ./docker/django/Dockerfile.dev
+  image: django:latest
+  env_file:
+    - ../env/dev.env
+  environment:
+    - DEBUG=True
+  depends_on:
+    - mysql_db
+  volumes:
+    - ../src/security_scanner:/app
+
+
 services:
-  # Django application
   web:
-    build:
-      context: ..
-      dockerfile: ./docker/security_scanner/Dockerfile.dev
-    image: security_scanner:latest
-    container_name: security_scanner
-    env_file:
-      - ../env/dev.env
-    volumes:
-      - ../src/security_scanner:/app
+    <<: *django_template
+    container_name: web
     ports:
       - "8000:8000"
-    environment:
-      - DEBUG=True
-    depends_on:
-      - mysql_db
     command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+
+  worker:
+    <<: *django_template
+    container_name: worker
+    command: sh -c "python task_runner/entrypoint.py"
 
   # MySQL database
   mysql_db:
